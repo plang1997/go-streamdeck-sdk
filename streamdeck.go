@@ -198,7 +198,7 @@ func (sd *StreamDeck) spawnMessageReader() {
 				sd.delegate.OnApplicationDidTerminate(&ev)
 			}
 		case "keyDown":
-			var ev evKeyDown
+			var ev EvKeyDown
 			err := json.Unmarshal(message, &ev)
 			if err != nil {
 				log.Fatal("keyDown unmarshal", err)
@@ -207,7 +207,7 @@ func (sd *StreamDeck) spawnMessageReader() {
 				sd.delegate.OnKeyDown(&ev)
 			}
 		case "keyUp":
-			var ev evKeyUp
+			var ev EvKeyUp
 			err := json.Unmarshal(message, &ev)
 			if err != nil {
 				log.Fatal("keyUp unmarshal", err)

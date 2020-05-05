@@ -1,4 +1,4 @@
-module github.com/exension/go-streamdeck-sdk
+module github.com/plang1997/go-streamdeck-sdk
 
 go 1.12
 
