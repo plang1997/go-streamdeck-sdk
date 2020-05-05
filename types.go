@@ -122,3 +122,36 @@ type evSetImage struct {
 	Context string            `json:"context"`
 	Payload evSetImagePayload `json:"payload"`
 }
+
+type evKeyPayload struct {
+	Settings         *json.RawMessage `json:"settings"`
+	Coordinates      EvCoordinates    `json:"coordinates"`
+	State            int              `json:"state"`
+	UserDesiredState int              `json:"device"`
+	IsInMultiAction  bool             `json:"isInMultiAction"`
+}
+
+type EvKeyDown struct {
+	Action  string              `json:"action"`
+	Event   string              `json:"event"`
+	Context string              `json:"context"`
+	Device  string              `json:"device"`
+	Payload evKeyPayload        `json:"payload"`
+}
+
+type EvKeyUp struct {
+	Action  string              `json:"action"`
+	Event   string              `json:"event"`
+	Context string              `json:"context"`
+	Device  string              `json:"device"`
+	Payload evKeyPayload        `json:"payload"`
+}
+
+type evOpenUrlPayload struct {
+	Url      string             `json:"url"`
+}
+
+type evOpenUrl struct {
+	Event    string             `json:"event"`
+	Payload  evOpenUrlPayload   `json:"payload"`
+}

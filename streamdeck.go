@@ -22,6 +22,8 @@ type EventDelegate interface {
 	OnSendToPlugin(*EvSendToPlugin)
 	OnApplicationDidLaunch(*EvApplication)
 	OnApplicationDidTerminate(*EvApplication)
+	OnKeyDown(*EvKeyDown)
+	OnKeyUp(*EvKeyUp)
 }
 
 // StreamDeck SDK APIs
@@ -195,6 +197,24 @@ func (sd *StreamDeck) spawnMessageReader() {
 			if sd.delegate != nil {
 				sd.delegate.OnApplicationDidTerminate(&ev)
 			}
+		case "keyDown":
+			var ev evKeyDown
+			err := json.Unmarshal(message, &ev)
+			if err != nil {
+				log.Fatal("keyDown unmarshal", err)
+			}
+			if sd.delegate != nil {
+				sd.delegate.OnKeyDown(&ev)
+			}
+		case "keyUp":
+			var ev evKeyUp
+			err := json.Unmarshal(message, &ev)
+			if err != nil {
+				log.Fatal("keyUp unmarshal", err)
+			}
+			if sd.delegate != nil {
+				sd.delegate.OnKeyUp(&ev)
+			}
 		default:
 			log.Printf("Unknown event: %s\n", event)
 		}
@@ -286,6 +306,21 @@ func (sd *StreamDeck) SetImage(context string, bts []byte) error {
 	data, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("setImage: %v", err)
+	}
+	err = sd.conn.WriteMessage(websocket.TextMessage, data)
+	if err != nil {
+		return fmt.Errorf("setImage write: %v", err)
+	}
+	return nil
+}
+
+func (sd *StreamDeck) OpenUrl(context string, url string) error {
+	event := evOpenUrl{Event: "openUrl", Payload: evOpenUrlPayload{
+		Url: url,
+	}}
+	data, err := json.Marshal(event)
+	if err != nil {
+		return fmt.Errorf("openUrl: %v", err)
 	}
 	err = sd.conn.WriteMessage(websocket.TextMessage, data)
 	if err != nil {
